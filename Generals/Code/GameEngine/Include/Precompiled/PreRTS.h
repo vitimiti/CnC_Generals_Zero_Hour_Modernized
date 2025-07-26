@@ -17,9 +17,9 @@
 */
 
 ////////////////////////////////////////////////////////////////////////////////
-//																																						//
-//  (c) 2001-2003 Electronic Arts Inc.																				//
-//																																						//
+//                                                                            //
+//  (c) 2001-2003 Electronic Arts Inc.                                        //
+//                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
 // This file contains all the header files that shouldn't change frequently.
@@ -41,50 +41,50 @@ class STLSpecialAlloc;
 // PLEASE DO NOT ABUSE WINDOWS OR IT WILL BE REMOVED ENTIRELY. :-)
 //--------------------------------------------------------------------------------- System Includes 
 #define WIN32_LEAN_AND_MEAN
-#include <atlbase.h>
-#include <windows.h>
+// #include <atlbase.h> -- Win32
+// #include <windows.h> -- Win32
 
-#include <assert.h>
-#include <ctype.h>
-#include <direct.h>
-#include <EXCPT.H>
-#include <float.h>
-#include <fstream.h>
-#include <imagehlp.h>
-#include <io.h>
-#include <limits.h>
-#include <lmcons.h>
-#include <mapicode.h>
-#include <math.h>
-#include <memory.h>
-#include <mmsystem.h>
-#include <objbase.h>
-#include <ocidl.h>
-#include <process.h>
-#include <shellapi.h>
-#include <shlobj.h>
-#include <shlguid.h>
-#include <snmp.h>
-#include <stdarg.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cassert>
+#include <cctype>
+// #include <direct.h> -- Win32
+// #include <EXCPT.H> -- Win32
+#include <cfloat>
+#include <fstream>
+// #include <imagehlp.h> -- Win32
+// #include <io.h> -- Win32
+#include <climits>
+// #include <lmcons.h> -- Win32
+// #include <mapicode.h> -- Win32
+#include <cmath>
+#include <memory>
+// #include <mmsystem.h> -- Win32
+// #include <objbase.h> -- Win32
+// #include <ocidl.h> -- Win32
+// #include <process.h> -- Win32
+// #include <shellapi.h> -- Win32
+// #include <shlobj.h> -- Win32
+// #include <shlguid.h> -- Win32
+// #include <snmp.h> -- Win32
+#include <cstdarg>
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <sys/stat.h>
 #include <sys/timeb.h>
 #include <sys/types.h>
-#include <TCHAR.H>
-#include <time.h>
-#include <vfw.h>
-#include <winerror.h>
-#include <wininet.h>
-#include <winreg.h>
+// #include <TCHAR.H> -- Win32
+#include <ctime>
+// #include <vfw.h> -- Win32
+// #include <winerror.h> -- Win32
+// #include <wininet.h> -- Win32
+// #include <winreg.h> -- Win32
 
 #ifndef DIRECTINPUT_VERSION
 #	define DIRECTINPUT_VERSION	0x800
 #endif
 
-#include <dinput.h>
+// #include <dinput.h> -- Win32
 
 //------------------------------------------------------------------------------------ STL Includes
 // srj sez: no, include STLTypesdefs below, instead, thanks
@@ -101,7 +101,7 @@ class STLSpecialAlloc;
 
 //------------------------------------------------------------------------------------ RTS Includes
 // Icky. These have to be in this order.
-#include "Lib/Basetype.h"
+#include "Lib/BaseType.h"
 #include "Common/STLTypedefs.h"
 #include "Common/Errors.h"
 #include "Common/Debug.h"

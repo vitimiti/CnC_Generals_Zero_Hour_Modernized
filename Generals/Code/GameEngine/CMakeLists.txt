@@ -5,6 +5,7 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/Source/Common/System/AsciiString.cpp
     ${PROJECT_SOURCE_DIR}/Source/Common/System/CriticalSection.cpp
     ${PROJECT_SOURCE_DIR}/Source/Common/System/Snapshot.cpp
+    ${PROJECT_SOURCE_DIR}/Source/Common/System/String.cpp
     ${PROJECT_SOURCE_DIR}/Source/Common/System/SubsystemInterface.cpp
     ${PROJECT_SOURCE_DIR}/Source/Common/System/UnicodeString.cpp)
 
@@ -14,6 +15,7 @@ set(PUBLIC_HDR
     ${PROJECT_SOURCE_DIR}/Include/Common/CriticalSection.h
     ${PROJECT_SOURCE_DIR}/Include/Common/Overridable.h
     ${PROJECT_SOURCE_DIR}/Include/Common/Snapshot.h
+    ${PROJECT_SOURCE_DIR}/Include/Common/String.h
     ${PROJECT_SOURCE_DIR}/Include/Common/SubsystemInterface.h
     ${PROJECT_SOURCE_DIR}/Include/Common/UnicodeString.h)
 

@@ -72,10 +72,14 @@
 #if defined _WIN32 || defined __CYGWIN__
 #define STRICMP _stricmp
 #define WCSICMP _wcsicmp
+#define STRNICMP strnicmp
+#define VSNPRINTF _vsnprintf
 #else
 #include <cwchar>
 #define STRICMP strcasecmp
 #define WCSICMP wcscasecmp
+#define STRNICMP strncasecmp
+#define VSNPRINTF vsnprintf
 #endif
 
 #if defined _WIN32 || defined __CYGWIN__

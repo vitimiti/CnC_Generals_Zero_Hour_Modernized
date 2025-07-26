@@ -1,10 +1,15 @@
 project(CNC_GENERALS_CODE_GAMEENGINE)
 
-set(SRC ${PROJECT_SOURCE_DIR}/Source/Common/System/Snapshot.cpp
-        ${PROJECT_SOURCE_DIR}/Source/Common/System/SubsystemInterface.cpp)
+set(SRC
+    ${PROJECT_SOURCE_DIR}/Source/Common/System/AsciiString.cpp
+    ${PROJECT_SOURCE_DIR}/Source/Common/System/Snapshot.cpp
+    ${PROJECT_SOURCE_DIR}/Source/Common/System/SubsystemInterface.cpp)
 
-set(PUBLIC_HDR ${PROJECT_SOURCE_DIR}/Include/Common/Snapshot.h
-               ${PROJECT_SOURCE_DIR}/Include/Common/SubsystemInterface.h)
+set(PUBLIC_HDR
+    ${PROJECT_SOURCE_DIR}/Include/Common/AsciiString.h
+    ${PROJECT_SOURCE_DIR}/Include/Common/Overridable.h
+    ${PROJECT_SOURCE_DIR}/Include/Common/Snapshot.h
+    ${PROJECT_SOURCE_DIR}/Include/Common/SubsystemInterface.h)
 
 set(PRECOMPILED_HDR ${PROJECT_SOURCE_DIR}/Include/Precompiled/PreRTS.h)
 

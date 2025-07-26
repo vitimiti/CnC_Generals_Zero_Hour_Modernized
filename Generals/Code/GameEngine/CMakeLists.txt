@@ -23,6 +23,7 @@ set(PUBLIC_HDR
     ${PROJECT_SOURCE_DIR}/Include/Common/NameKeyGenerator.h
     ${PROJECT_SOURCE_DIR}/Include/Common/Overridable.h
     ${PROJECT_SOURCE_DIR}/Include/Common/Snapshot.h
+    ${PROJECT_SOURCE_DIR}/Include/Common/STLTypedefs.h
     ${PROJECT_SOURCE_DIR}/Include/Common/String.h
     ${PROJECT_SOURCE_DIR}/Include/Common/SubsystemInterface.h
     ${PROJECT_SOURCE_DIR}/Include/Common/UnicodeString.h

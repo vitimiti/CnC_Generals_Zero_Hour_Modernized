@@ -32,7 +32,11 @@
 #define _CRC_H_
 
 #include "Lib/BaseType.h"
+#ifdef _MSC_VER
 #include "winsock2.h" // for htonl
+#else
+#include <arpa/inet.h> // for htonl
+#endif
 
 class CRC
 {

@@ -15,15 +15,19 @@ QualifierAlignment: Right
 
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex: "^<SDL3"
-    Priority: 2
-    SortPriority: 2
-    CaseSensitive: true
-  - Regex: '^"'
+  - Regex: "^<glm"
     Priority: 3
     SortPriority: 3
     CaseSensitive: true
-  - Regex: "^<"
+  - Regex: '"PreRTS.h"'
     Priority: 1
     SortPriority: 1
+    CaseSensitive: true
+  - Regex: '^"'
+    Priority: 4
+    SortPriority: 4
+    CaseSensitive: true
+  - Regex: "^<"
+    Priority: 2
+    SortPriority: 2
     CaseSensitive: true

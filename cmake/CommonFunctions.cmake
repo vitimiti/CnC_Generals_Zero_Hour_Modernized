@@ -39,7 +39,7 @@ function(target_set_dll_compile_options _TARGET _VISIBILITY)
   )
 endfunction()
 
-function(target_set_common_compile_options _TARGET _VISIBILITY)
+function(target_treat_warnings_as_errors _TARGET _VISIBILITY)
   target_compile_options(
     ${_TARGET}
     ${_VISIBILITY}
@@ -47,6 +47,19 @@ function(target_set_common_compile_options _TARGET _VISIBILITY)
     #
     # Treat warnings as errors
     $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<COMPILE_LANGUAGE:CXX>>:/WX>
+    # GNU / Clang Flags
+    #
+    # Treat warnings as errors
+    $<$<AND:$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>,$<COMPILE_LANGUAGE:CXX>>:-Werror>
+  )
+endfunction()
+
+function(target_set_common_compile_options _TARGET _VISIBILITY)
+  target_compile_options(
+    ${_TARGET}
+    ${_VISIBILITY}
+    # MSVC Flags
+    #
     # Level 4 warnings
     $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<COMPILE_LANGUAGE:CXX>>:/W4>
     # 'identifier' : conversion from 'type1' to 'type2', possible loss of data
@@ -103,10 +116,8 @@ function(target_set_common_compile_options _TARGET _VISIBILITY)
     $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<COMPILE_LANGUAGE:CXX>,$<CONFIG:Release>>:/O2>
     # FOr MinSizeRel
     $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<COMPILE_LANGUAGE:CXX>,$<CONFIG:MinSizeRel>>:/Os>
-    # For Release and MinSizeRel GNU / Clang Flags
+    # GNU / Clang Flags
     #
-    # Treat warnings as errors
-    $<$<AND:$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>,$<COMPILE_LANGUAGE:CXX>>:-Werror>
     # "All" warnings
     $<$<AND:$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>,$<COMPILE_LANGUAGE:CXX>>:-Wall>
     # Extra warnings

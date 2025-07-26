@@ -19,9 +19,17 @@
 
 #include "Common/URLLaunch.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <cstdlib>
+#include <string>
+#endif
+
 #define FILE_PREFIX     L"file://"
 
 
+#ifdef _WIN32
 ///////////////////////////////////////////////////////////////////////////////
 HRESULT MakeEscapedURL( LPWSTR pszInURL, LPWSTR *ppszOutURL )
 {
@@ -222,11 +230,40 @@ HRESULT GetShellOpenCommand( LPTSTR ptszShellOpenCommand, DWORD cbShellOpenComma
 
     return( HRESULT_FROM_WIN32( lResult ) );
 }
+#else
+HRESULT MakeEscapedURL(wchar_t* pszInURL, wchar_t** ppszOutURL)
+{
+    if (!pszInURL || !ppszOutURL)
+    {
+        return -1; // E_INVALIDARG equivalent
+    }
+
+    std::wstring url(pszInURL);
+
+    // Check if we need to prepend file://
+    bool needFilePrefix = (url.find(L"://") == std::wstring::npos);
+
+    // Allocate new string
+    size_t len = url.length() + (needFilePrefix ? wcslen(FILE_PREFIX) : 0) + 1;
+    *ppszOutURL = new wchar_t[len];
+
+    if (!*ppszOutURL)
+    {
+        return -2; // E_OUTOFMEMORY equivalent
+    }
+
+    wcscpy(*ppszOutURL, needFilePrefix ? FILE_PREFIX : L"");
+    wcscat(*ppszOutURL, pszInURL);
+
+    return 0;  // S_OK equivalent
+}
+#endif
 
 
 ///////////////////////////////////////////////////////////////////////////////
 HRESULT LaunchURL( LPCWSTR pszURL )
 {
+#ifdef _WIN32
     HRESULT hr;
 
     //
@@ -297,7 +334,7 @@ HRESULT LaunchURL( LPCWSTR pszURL )
 
     //
     // Because of the extremely long length of the URLs, neither
-    // WinExec, nor ShellExecute, were working correctly.  For this reason 
+    // WinExec, nor ShellExecute, were working correctly.  For this reason
     // we use CreateProcess.  The CreateProcess documentation in MSDN says
     // that the most robust way to call CreateProcess is to pass the full
     // command line, where the first element is the application name, in the
@@ -310,9 +347,9 @@ HRESULT LaunchURL( LPCWSTR pszURL )
     STARTUPINFO StartUp;
     ZeroMemory( (LPVOID)&StartUp, sizeof( STARTUPINFO ) );
 
-    StartUp.cb = sizeof(STARTUPINFO); 
+    StartUp.cb = sizeof(STARTUPINFO);
 
-    if( !CreateProcess( szExe, szLaunchCommand, NULL, NULL, 
+    if( !CreateProcess( szExe, szLaunchCommand, NULL, NULL,
                         FALSE, 0, NULL, NULL, &StartUp, &ProcInfo) )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
@@ -320,7 +357,7 @@ HRESULT LaunchURL( LPCWSTR pszURL )
     else
     {
         //
-        // CreateProcess succeeded and we do not need the handles to the thread 
+        // CreateProcess succeeded and we do not need the handles to the thread
         // or the process, so close them now.
         //
         if( NULL != ProcInfo.hThread )
@@ -335,4 +372,30 @@ HRESULT LaunchURL( LPCWSTR pszURL )
     }
 
     return( hr );
+#else
+    if (!pszURL)
+    {
+        return -1; // E_INVALIDARG equivalent
+    }
+
+    // Convert wide string to UTF-8
+    std::string url;
+    size_t len = wcstombs(nullptr, pszURL, 0);
+    if (len != (size_t)-1)
+    {
+        std::vector<char> buffer(len + 1);
+        wcstombs(buffer.data(), pszURL, len);
+        url = buffer.data();
+    }
+    else
+    {
+        return -1;  // Conversion failed
+    }
+
+    // Create command using xdg-open (standard way to open URLs on Linux)
+    std::string cmd = "xdg-open \"" + url + "\" &";
+    int result = system(cmd.c_str());
+
+    return (result == 0) ? 0 : -1;  // Return success (0) or error (-1)
+#endif
 }

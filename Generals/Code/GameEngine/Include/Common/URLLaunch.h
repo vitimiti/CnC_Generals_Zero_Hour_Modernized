@@ -20,6 +20,14 @@
 #ifndef URLLAUNCH_H
 #define URLLAUNCH_H
 
+#ifdef _WIN32
+#include <windows.h>
+#else
+typedef int HRESULT;
+typedef wchar_t* LPWSTR;
+typedef const wchar_t* LPCWSTR;
+#endif
+
 HRESULT MakeEscapedURL( LPWSTR pszInURL, LPWSTR *ppszOutURL );
 
 HRESULT LaunchURL( LPCWSTR pszURL );

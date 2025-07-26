@@ -2,6 +2,7 @@ project(CNC_GENERALS_CODE_GAMEENGINE)
 
 set(SRC
     ${PROJECT_SOURCE_DIR}/Source/Common/CRC.cpp
+    ${PROJECT_SOURCE_DIR}/Source/Common/NameKeyGenerator.cpp
     ${PROJECT_SOURCE_DIR}/Source/Common/Audio/URLLaunch.cpp
     ${PROJECT_SOURCE_DIR}/Source/Common/System/AsciiString.cpp
     ${PROJECT_SOURCE_DIR}/Source/Common/System/CriticalSection.cpp
@@ -19,6 +20,7 @@ set(PUBLIC_HDR
     ${PROJECT_SOURCE_DIR}/Include/Common/GameCommon.h
     ${PROJECT_SOURCE_DIR}/Include/Common/GameMemory.h
     ${PROJECT_SOURCE_DIR}/Include/Common/INIException.h
+    ${PROJECT_SOURCE_DIR}/Include/Common/NameKeyGenerator.h
     ${PROJECT_SOURCE_DIR}/Include/Common/Overridable.h
     ${PROJECT_SOURCE_DIR}/Include/Common/Snapshot.h
     ${PROJECT_SOURCE_DIR}/Include/Common/String.h

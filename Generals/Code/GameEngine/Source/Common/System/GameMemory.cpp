@@ -235,13 +235,24 @@ static Int roundUpMemBound(Int i)
 */
 static void* sysAllocate(Int numBytes)
 {
+#ifdef _WIN32
 	void* p = ::GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, numBytes);
+#else
+        void* p = calloc(1, numBytes);
+#endif
+
 	if (!p)
 		throw ERROR_OUT_OF_MEMORY;
 #ifdef MEMORYPOOL_DEBUG
 	{
 		USE_PERF_TIMER(MemoryPoolDebugging)
+
+#ifdef _WIN32
 		theTotalSystemAllocationInBytes += ::GlobalSize(p);
+#else
+	        theTotalSystemAllocationInBytes += numBytes;
+#endif
+
 		if (thePeakSystemAllocationInBytes < theTotalSystemAllocationInBytes)
 			thePeakSystemAllocationInBytes = theTotalSystemAllocationInBytes;
 	}
@@ -259,7 +270,12 @@ static void* sysAllocate(Int numBytes)
 */
 static void* sysAllocateDoNotZero(Int numBytes)
 {
+#ifdef _WIN32
 	void* p = ::GlobalAlloc(GMEM_FIXED, numBytes);
+#else
+        void* p = malloc(numBytes);
+#endif
+
 	if (!p)
 		throw ERROR_OUT_OF_MEMORY;
 #ifdef MEMORYPOOL_DEBUG
@@ -268,10 +284,27 @@ static void* sysAllocateDoNotZero(Int numBytes)
 		#ifdef USE_FILLER_VALUE
 		{
 			USE_PERF_TIMER(MemoryPoolInitFilling)
+
+#ifdef _WIN32
 			::memset32(p, s_initFillerValue, ::GlobalSize(p));
+#else
+		        size_t size = numBytes;
+		        unsigned int* ptr = static_cast<unsigned int*>(p);
+		        size_t numInts = (size + sizeof(unsigned int) - 1) / sizeof(unsigned int);
+		        for (size_t i = 0; i < numInts; ++i)
+		        {
+		            ptr[i] = s_initFillerValue;
+		        }
+#endif
 		}
 		#endif
-		theTotalSystemAllocationInBytes += ::GlobalSize(p);
+
+#ifdef _WIN32
+	        theTotalSystemAllocationInBytes += ::GlobalSize(p);
+#else
+	        theTotalSystemAllocationInBytes += numBytes;
+#endif
+
 		if (thePeakSystemAllocationInBytes < theTotalSystemAllocationInBytes)
 			thePeakSystemAllocationInBytes = theTotalSystemAllocationInBytes;
 	}
@@ -291,11 +324,29 @@ static void sysFree(void* p)
 #ifdef MEMORYPOOL_DEBUG
 		{
 			USE_PERF_TIMER(MemoryPoolDebugging)
-			::memset32(p, GARBAGE_FILL_VALUE, ::GlobalSize(p));
+
+#ifdef _WIN32
+                        ::memset32(p, s_initFillerValue, ::GlobalSize(p));
 			theTotalSystemAllocationInBytes -= ::GlobalSize(p);
+#else
+		        size_t size = numBytes;
+		        unsigned int* ptr = static_cast<unsigned int*>(p);
+		        size_t numInts = (size + sizeof(unsigned int) - 1) / sizeof(unsigned int);
+		        for (size_t i = 0; i < numInts; ++i)
+		        {
+		            ptr[i] = s_initFillerValue;
+    		        }
+
+		        theTotalSystemAllocationInBytes += numBytes;
+#endif
 		}
 #endif
+
+#ifdef _WIN32
 		::GlobalFree(p);
+#else
+	        free(p);
+#endif
 	}
 }
 
@@ -1655,7 +1706,7 @@ void* MemoryPool::allocateBlockDoNotZeroImplementation(DECLARE_LITERALSTRING_ARG
 	{
 		// hmm... the current 'free' blob has nothing available. look and see if there
 		// are any other existing blobs with freespace.
-		for (MemoryPoolBlob *blob = m_firstBlob; blob != NULL; blob = blob->getNextInList()) 
+		for (MemoryPoolBlob *blob = m_firstBlob; blob != NULL; blob = blob->getNextInList())
 		{
 			if (blob->hasAnyFreeBlocks())
 			 	break;
@@ -1663,7 +1714,7 @@ void* MemoryPool::allocateBlockDoNotZeroImplementation(DECLARE_LITERALSTRING_ARG
 
 		// note that if we walk thru the list without finding anything, this will 
 		// reset m_firstBlobWithFreeBlocks to null and fall thru.
-	 	m_firstBlobWithFreeBlocks = blob;
+	 	m_firstBlobWithFreeBlocks = m_firstBlob;
 	}
 	
 	// OK, if we are here then we have no blobs with freespace... darn.
@@ -3461,7 +3512,7 @@ void initMemoryManager()
 	linktest = new char[8];
 	delete [] linktest;
 
-	linktest = new char("",1);
+	linktest = new char('');
 	delete linktest;
 
 #ifdef MEMORYPOOL_OVERRIDE_MALLOC

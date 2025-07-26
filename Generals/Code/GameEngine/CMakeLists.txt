@@ -6,6 +6,7 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/Source/Common/System/AsciiString.cpp
     ${PROJECT_SOURCE_DIR}/Source/Common/System/CriticalSection.cpp
     ${PROJECT_SOURCE_DIR}/Source/Common/System/GameCommon.cpp
+    ${PROJECT_SOURCE_DIR}/Source/Common/System/GameMemory.cpp
     ${PROJECT_SOURCE_DIR}/Source/Common/System/Snapshot.cpp
     ${PROJECT_SOURCE_DIR}/Source/Common/System/String.cpp
     ${PROJECT_SOURCE_DIR}/Source/Common/System/SubsystemInterface.cpp
@@ -16,6 +17,7 @@ set(PUBLIC_HDR
     ${PROJECT_SOURCE_DIR}/Include/Common/CRC.h
     ${PROJECT_SOURCE_DIR}/Include/Common/CriticalSection.h
     ${PROJECT_SOURCE_DIR}/Include/Common/GameCommon.h
+    ${PROJECT_SOURCE_DIR}/Include/Common/GameMemory.h
     ${PROJECT_SOURCE_DIR}/Include/Common/INIException.h
     ${PROJECT_SOURCE_DIR}/Include/Common/Overridable.h
     ${PROJECT_SOURCE_DIR}/Include/Common/Snapshot.h

@@ -32,8 +32,60 @@
 #ifndef _BASE_TYPE_H_
 #define _BASE_TYPE_H_
 
-#include <math.h>
-#include <string.h>
+#if defined _WIN32 || defined __CYGWIN__
+  #ifdef WIN_EXPORT
+    #ifdef __GNUC__
+      #define DCLSPEC_DLLEXPORT __attribute__ ((dllexport))
+    #else
+      #define DCLSPEC_DLLEXPORT __declspec(dllexport) // Note: actually gcc seems to also supports this syntax.
+    #endif
+  #else
+    #ifdef __GNUC__
+      #define DCLSPEC_DLLEXPORT __attribute__ ((dllimport))
+    #else
+      #define DCLSPEC_DLLEXPORT __declspec(dllimport) // Note: actually gcc seems to also supports this syntax.
+    #endif
+  #endif
+  #define DCLSPEC_DLLIMPORT
+#else
+  #if __GNUC__ >= 4
+    #define DCLSPEC_DLLEXPORT __attribute__ ((visibility ("default")))
+    #define DCLSPEC_DLLIMPORT  __attribute__ ((visibility ("hidden")))
+  #else
+    #define DCLSPEC_DLLEXPORT
+    #define DCLSPEC_DLLIMPORT
+  #endif
+#endif
+
+#if defined _WIN32 || defined __CYGWIN__
+#define INT64 __int64
+#else
+#define INT64 long long
+#endif
+
+#if defined _WIN32 || defined __CYGWIN__
+#define FORCEINLINE __forceinline
+#else
+#define FORCEINLINE __attribute__((always_inline))
+#endif
+
+#if defined _WIN32 || defined __CYGWIN__
+#define STRICMP _stricmp
+#define WCSICMP _wcsicmp
+#else
+#include <cwchar>
+#define STRICMP strcasecmp
+#define WCSICMP wcscasecmp
+#endif
+
+#if defined _WIN32 || defined __CYGWIN__
+#define CDECL __cdecl
+#else
+#define CDECL
+#endif
+
+#include <cmath>
+#include <cstring>
 
 /*
 **	Turn off some unneeded warnings.
@@ -93,10 +145,10 @@
 #endif
 
 // MSVC math.h defines overloaded functions with this name...
-//#ifndef abs
-//#define abs(x) (((x) < 0) ? -(x) : (x))
-//#endif
-
+// #ifndef abs
+// #define abs(x) (((x) < 0) ? -(x) : (x))
+// #endif
+//
 // #ifndef min
 // #define min(x,y) (((x)<(y)) ? (x) : (y))
 // #endif
@@ -126,8 +178,8 @@ typedef char Byte; // 1 byte		USED TO BE "SignedByte"
 typedef char Char; // 1 byte of text
 typedef bool Bool; //
 // note, the types below should use "long long", but MSVC doesn't support it yet
-typedef __int64 Int64; // 8 bytes
-typedef unsigned __int64 UnsignedInt64; // 8 bytes
+typedef INT64 Int64; // 8 bytes
+typedef unsigned INT64 UnsignedInt64; // 8 bytes
 
 #include "Lib/Trig.h"
 
@@ -171,13 +223,22 @@ inline Real deg2rad(Real rad) { return rad * (PI / 180); }
 // note, this function depends on the cpu rounding mode, which we set to CHOP every frame,
 // but apparently tends to be left in unpredictable modes by various system bits of
 // code, so use this function with caution -- it might not round in the way you want.
-__forceinline long fast_float2long_round(float f) {
+FORCEINLINE long fast_float2long_round(float f) {
 	long i;
 
+    #ifdef _MSC_VER
 	__asm {
 			fld [f]
 			fistp [i]
 			}
+    #else
+    __asm__ __volatile__(
+        "flds %1\n\t"
+        "fistpl %0"
+        : "=m" (i)
+        : "m" (f)
+    );
+    #endif
 
 	return i;
 }
@@ -212,8 +273,8 @@ struct RealRange {
 	// combine the given range with us such that we now encompass
 	// both ranges
 	void combine(RealRange &other) {
-		lo = min(lo, other.lo);
-		hi = max(hi, other.hi);
+		lo = std::min(lo, other.lo);
+		hi = std::max(hi, other.hi);
 	}
 };
 

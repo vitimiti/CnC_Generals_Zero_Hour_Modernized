@@ -861,30 +861,24 @@ extern void userMemoryAdjustPoolSize(const char *poolName, Int &initialAllocatio
 
 #define _OPERATOR_NEW_DEFINED_
 
-extern void * __cdecl operator new(size_t size);
+extern void * CDECL operator new(size_t size);
 
-extern void __cdecl operator delete(void *p);
+extern void CDECL operator delete(void *p);
 
-extern void * __cdecl operator new[](size_t size);
+extern void * CDECL operator new[](size_t size);
 
-extern void __cdecl operator delete[](void *p);
+extern void CDECL operator delete[](void *p);
 
 // additional overloads to account for VC/MFC funky versions
-extern void * __cdecl operator new(size_t nSize, const char *, int);
+extern void * CDECL operator new(size_t nSize, const char *, int);
 
-extern void __cdecl operator delete(void *, const char *, int);
+extern void CDECL operator delete(void *, const char *, int);
 
-extern void * __cdecl operator new[](size_t nSize, const char *, int);
+extern void * CDECL operator new[](size_t nSize, const char *, int);
 
-extern void __cdecl operator delete[](void *, const char *, int);
+extern void CDECL operator delete[](void *, const char *, int);
 
-// additional overloads for 'placement new'
-//inline void* __cdecl operator new							(size_t s, void *p) { return p; }
-//inline void __cdecl operator delete						(void *, void *p)		{ }
-inline void * __cdecl operator new[](size_t s, void *p) { return p; }
-
-inline void __cdecl operator delete[](void *, void *p) {
-}
+#include <new> // The operators are defined here now.
 
 #endif
 

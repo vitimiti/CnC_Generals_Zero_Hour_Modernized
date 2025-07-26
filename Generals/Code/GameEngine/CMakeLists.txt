@@ -1,13 +1,16 @@
 project(CNC_GENERALS_CODE_GAMEENGINE)
 
-set(SRC ${PROJECT_SOURCE_DIR}/Source/Common/System/Snapshot.cpp)
+set(SRC ${PROJECT_SOURCE_DIR}/Source/Common/System/Snapshot.cpp
+        ${PROJECT_SOURCE_DIR}/Source/Common/System/SubsystemInterface.cpp)
 
-set(PUBLIC_HDR ${PROJECT_SOURCE_DIR}/Include/Common/Snapshot.h)
+set(PUBLIC_HDR ${PROJECT_SOURCE_DIR}/Include/Common/Snapshot.h
+               ${PROJECT_SOURCE_DIR}/Include/Common/SubsystemInterface.h)
 
 set(PRECOMPILED_HDR ${PROJECT_SOURCE_DIR}/Include/Precompiled/PreRTS.h)
 
-set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/Include
-                ${PROJECT_SOURCE_DIR}/../Libraries/Include)
+set(INCLUDE_DIR
+    ${PROJECT_SOURCE_DIR}/Include ${PROJECT_SOURCE_DIR}/../Libraries/Include
+    ${PROJECT_SOURCE_DIR}/Include/Precompiled)
 
 if(BUILD_SHARED_LIBS)
   add_library(${PROJECT_NAME} SHARED)

@@ -58,24 +58,24 @@
 #endif
 
 #if defined _WIN32 || defined __CYGWIN__
+#define CDECL __cdecl
+
 #define INT64 __int64
 
 #define FORCEINLINE __forceinline
-#else
-#define INT64 long long
-
-#define FORCEINLINE __attribute__((always_inline))
 
 #define STRICMP _stricmp
 #define WCSICMP _wcsicmp
 #define STRNICMP strnicmp
 #define VSNPRINTF _vsnprintf
 #define VSNWPRINTF _vsnwprintf
-#endif
 
-#if defined _WIN32 || defined __CYGWIN__
-#define FORCEINLINE __forceinline
+#define ISNAN _isnan
 #else
+#define CDECL
+
+#define INT64 long long
+
 #define FORCEINLINE __attribute__((always_inline))
 
 #define STRICMP strcasecmp
@@ -83,25 +83,7 @@
 #define STRNICMP strncasecmp
 #define VSNPRINTF vsnprintf
 #define VSNWPRINTF vswprintf
-#endif
-
-#if defined _WIN32 || defined __CYGWIN__
-#define STRICMP _stricmp
-#define WCSICMP _wcsicmp
-#define STRNICMP strnicmp
-#define VSNPRINTF _vsnprintf
-#else
-#include <cwchar>
-#define STRICMP strcasecmp
-#define WCSICMP wcscasecmp
-#define STRNICMP strncasecmp
-#define VSNPRINTF vsnprintf
-#endif
-
-#if defined _WIN32 || defined __CYGWIN__
-#define CDECL __cdecl
-#else
-#define CDECL
+#define ISNAN std::isnan
 #endif
 
 #include <cmath>

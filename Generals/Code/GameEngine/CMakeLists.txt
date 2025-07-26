@@ -43,4 +43,3 @@ target_precompile_headers(${PROJECT_NAME} PUBLIC ${PRECOMPILED_HDR})
 if(NOT WIN32)
   target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
 endif()
-

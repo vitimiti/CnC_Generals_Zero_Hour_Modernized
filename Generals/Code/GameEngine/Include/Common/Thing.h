@@ -56,7 +56,8 @@
 //-----------------------------------------------------------------------------
 //           Includes                                                      
 //-----------------------------------------------------------------------------
-#include "Common/GameMemory.h"
+    #include "../../../../../cmake-build-debug/_deps/glm-src/glm/mat3x3.hpp"
+    #include "Common/GameMemory.h"
 #include "Common/KindOf.h"
 #include "Common/Override.h"
 // #include "WWMath/Matrix3D.h"							///< @todo Decide if we're keeping the WWMath libs (MSB) -- External Proprietary
@@ -140,11 +141,11 @@ public:
 	they are high enough that we should let them act like they're flying. jba. */
 	Bool isSignificantlyAboveTerrain() const;
 
-	void convertBonePosToWorldPos(const Coord3D *bonePos, const Matrix3D *boneTransform, Coord3D *worldPos,
-	                              Matrix3D *worldTransform) const;
+	void convertBonePosToWorldPos(const Coord3D *bonePos, const glm::mat3x3 *boneTransform, Coord3D *worldPos,
+	                              glm::mat3x3 *worldTransform) const;
 
-	void setTransformMatrix(const Matrix3D *mx); ///< set the world transformation matrix
-	const Matrix3D *getTransformMatrix() const { return &m_transform; } ///< return the world transformation matrix
+	void setTransformMatrix(const glm::mat3x3 *mx); ///< set the world transformation matrix
+	const glm::mat3x3 *getTransformMatrix() const { return &m_transform; } ///< return the world transformation matrix
 
 	void transformPoint(const Coord3D *in, Coord3D *out);
 
@@ -161,7 +162,7 @@ protected:
 	virtual const Object *asObjectMeth() const { return NULL; }
 	virtual const Drawable *asDrawableMeth() const { return NULL; }
 
-	virtual void reactToTransformChange(const Matrix3D *oldMtx, const Coord3D *oldPos, Real oldAngle) = 0;
+	virtual void reactToTransformChange(const glm::mat3x3 *oldMtx, const Coord3D *oldPos, Real oldAngle) = 0;
 
 private:
 	// note that it is declared 'const' -- the assumption being that
@@ -179,7 +180,7 @@ private:
 		(pos, angle, etc) are all simply cached values used for efficiency and convenience.
 		you should NEVER modify them directly, because that won't change anything!
 	*/
-	Matrix3D m_transform; ///< the 3D orientation and position of this Thing
+	glm::mat3x3 m_transform; ///< the 3D orientation and position of this Thing
 
 	enum {
 		VALID_DIRVECTOR = 0x01,

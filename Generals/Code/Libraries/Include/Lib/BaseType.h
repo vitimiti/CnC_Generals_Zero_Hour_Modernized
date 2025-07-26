@@ -59,14 +59,30 @@
 
 #if defined _WIN32 || defined __CYGWIN__
 #define INT64 __int64
+
+#define FORCEINLINE __forceinline
 #else
 #define INT64 long long
+
+#define FORCEINLINE __attribute__((always_inline))
+
+#define STRICMP _stricmp
+#define WCSICMP _wcsicmp
+#define STRNICMP strnicmp
+#define VSNPRINTF _vsnprintf
+#define VSNWPRINTF _vsnwprintf
 #endif
 
 #if defined _WIN32 || defined __CYGWIN__
 #define FORCEINLINE __forceinline
 #else
 #define FORCEINLINE __attribute__((always_inline))
+
+#define STRICMP strcasecmp
+#define WCSICMP wcscasecmp
+#define STRNICMP strncasecmp
+#define VSNPRINTF vsnprintf
+#define VSNWPRINTF vswprintf
 #endif
 
 #if defined _WIN32 || defined __CYGWIN__

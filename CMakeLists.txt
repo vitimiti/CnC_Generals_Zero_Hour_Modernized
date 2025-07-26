@@ -1,0 +1,2 @@
+cmake_minimum_required(VERSION 3.24)
+project(CNC_GENERALS_AND_ZERO_HOUR_MODERNIZED)

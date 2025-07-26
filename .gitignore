@@ -1,0 +1,12 @@
+# Build directories
+*[B|b]uild*/
+*[O|o]ut*/
+
+# User/temporary files
+*.user
+*.swp
+
+# IDE configuration directories
+.idea/
+.vs/
+.vscode/

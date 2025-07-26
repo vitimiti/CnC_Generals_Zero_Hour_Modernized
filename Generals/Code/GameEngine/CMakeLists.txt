@@ -14,6 +14,7 @@ set(PUBLIC_HDR
     ${PROJECT_SOURCE_DIR}/Include/Common/AsciiString.h
     ${PROJECT_SOURCE_DIR}/Include/Common/CRC.h
     ${PROJECT_SOURCE_DIR}/Include/Common/CriticalSection.h
+        ${PROJECT_SOURCE_DIR}/Include/Common/INIException.h
     ${PROJECT_SOURCE_DIR}/Include/Common/Overridable.h
     ${PROJECT_SOURCE_DIR}/Include/Common/Snapshot.h
     ${PROJECT_SOURCE_DIR}/Include/Common/String.h

@@ -27,6 +27,11 @@
 // Desc:   INI Exception class. Thrown when INIs fail to read.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __INIEXCEPTION_H__
+#define __INIEXCEPTION_H__
+
+#include <cstring>
+
 class INIException
 {
 	// This is a stack based exception class. It is used to output useful information
@@ -50,3 +55,5 @@ public:
 		}
 	}
 };
+
+#endif // __INIEXCEPTION_H__

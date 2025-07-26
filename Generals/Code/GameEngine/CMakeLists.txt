@@ -1,4 +1,4 @@
-project(CNC_GENERALS_CODE_GAMEENGINE)
+project(CNC_GENERALS_GAMEENGINE)
 
 set(SRC
     ${PROJECT_SOURCE_DIR}/Source/Common/CRC.cpp
@@ -45,8 +45,7 @@ target_sources(
   PUBLIC ${PUBLIC_HDR}
   PRIVATE ${SRC})
 
-target_set_name(${PROJECT_NAME} cnc-generals-code-gameengine
-                CnC.Generals.Code.GameEngine)
+target_set_name(${PROJECT_NAME} cnc-generals-gameengine CnC.Generals.GameEngine)
 
 target_set_dll_compile_options(${PROJECT_NAME} PUBLIC)
 target_set_common_compile_options(${PROJECT_NAME} PUBLIC)

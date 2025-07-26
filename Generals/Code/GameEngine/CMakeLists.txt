@@ -26,7 +26,8 @@ set(PUBLIC_HDR
     ${PROJECT_SOURCE_DIR}/Include/Common/String.h
     ${PROJECT_SOURCE_DIR}/Include/Common/SubsystemInterface.h
     ${PROJECT_SOURCE_DIR}/Include/Common/UnicodeString.h
-    ${PROJECT_SOURCE_DIR}/Include/Common/URLLaunch.h)
+    ${PROJECT_SOURCE_DIR}/Include/Common/URLLaunch.h
+    ${PROJECT_SOURCE_DIR}/Include/Common/WellKnownKeys.h)
 
 set(PRECOMPILED_HDR ${PROJECT_SOURCE_DIR}/Include/Precompiled/PreRTS.h)
 

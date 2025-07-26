@@ -18,7 +18,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 //																																						//
-//  (c) 2001-2003 Electronic Arts Inc.																				//
+//  (c) 2001-2003 Electronic Arts Inc.
+//  //
 //																																						//
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -33,66 +34,86 @@
 
 #include "Common/PerfTimer.h"
 
+#ifndef _MSC_VER
+#include <pthread.h>
+#endif
+
 #ifdef PERF_TIMERS
 extern PerfGather TheCritSecPerfGather;
 #endif
 
-class CriticalSection
-{
-	CRITICAL_SECTION m_windowsCriticalSection;
+class CriticalSection {
+#ifdef _MSC_VER
+    CRITICAL_SECTION m_windowsCriticalSection;
+#else
+    pthread_mutex_t m_posixMutex;
+#endif
 
-	public:
-		CriticalSection()
-		{
-			#ifdef PERF_TIMERS
-			AutoPerfGather a(TheCritSecPerfGather);
-			#endif
-			InitializeCriticalSection( &m_windowsCriticalSection );
-		}
+  public:
+    CriticalSection() {
+#ifdef PERF_TIMERS
+        AutoPerfGather a(TheCritSecPerfGather);
+#endif
 
-		virtual ~CriticalSection()
-		{
-			#ifdef PERF_TIMERS
-			AutoPerfGather a(TheCritSecPerfGather);
-			#endif
-			DeleteCriticalSection( &m_windowsCriticalSection );
-		}
+#ifdef _MSC_VER
+        InitializeCriticalSection(&m_windowsCriticalSection);
+#else
+        pthread_mutex_init(&m_posixMutex, NULL);
+#endif
+    }
 
-	public:	// Use these when entering/exiting a critical section.
-		void enter( void ) 
-		{ 
-			#ifdef PERF_TIMERS
-			AutoPerfGather a(TheCritSecPerfGather);
-			#endif
-			EnterCriticalSection( &m_windowsCriticalSection );
-		}
-		
-		void exit( void )
-		{
-			#ifdef PERF_TIMERS
-			AutoPerfGather a(TheCritSecPerfGather);
-			#endif
-			LeaveCriticalSection( &m_windowsCriticalSection );
-		}
+    virtual ~CriticalSection() {
+#ifdef PERF_TIMERS
+        AutoPerfGather a(TheCritSecPerfGather);
+#endif
+
+#ifdef _MSC_VER
+        DeleteCriticalSection(&m_windowsCriticalSection);
+#else
+        pthread_mutex_destroy(&m_posixMutex);
+#endif
+    }
+
+  public: // Use these when entering/exiting a critical section.
+    void enter(void) {
+#ifdef PERF_TIMERS
+        AutoPerfGather a(TheCritSecPerfGather);
+#endif
+
+#ifdef _MSC_VER
+        EnterCriticalSection(&m_windowsCriticalSection);
+#else
+        pthread_mutex_lock(&m_posixMutex);
+#endif
+    }
+
+    void exit(void) {
+#ifdef PERF_TIMERS
+        AutoPerfGather a(TheCritSecPerfGather);
+#endif
+
+#ifdef _MSC_VER
+        LeaveCriticalSection(&m_windowsCriticalSection);
+#else
+        pthread_mutex_unlock(&m_posixMutex);
+#endif
+    }
 };
 
-class ScopedCriticalSection
-{
-	private:
-		CriticalSection *m_cs;
-	
-	public:
-		ScopedCriticalSection( CriticalSection *cs ) : m_cs(cs)
-		{ 
-			if (m_cs) 
-				m_cs->enter();
-		}
+class ScopedCriticalSection {
+  private:
+    CriticalSection* m_cs;
 
-		virtual ~ScopedCriticalSection( )
-		{ 
-			if (m_cs) 
-				m_cs->exit();
-		}
+  public:
+    ScopedCriticalSection(CriticalSection* cs) : m_cs(cs) {
+        if (m_cs)
+            m_cs->enter();
+    }
+
+    virtual ~ScopedCriticalSection() {
+        if (m_cs)
+            m_cs->exit();
+    }
 };
 
 // These should be NULL on creation then non-NULL in WinMain or equivalent.
